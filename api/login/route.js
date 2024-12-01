@@ -15,7 +15,7 @@ export async function GET(req, res) {
     // database call goes here
     
 
-const uri = "mongodb+srv://admin:test@cluster0.b1dl8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const url = process.env.DB_ADDRESS ;
 
 
 

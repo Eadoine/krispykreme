@@ -19,7 +19,7 @@ let pass = data.get('pass')
 
 console.log("Sent email:" + email)
 console.log("Sent pass:" + pass)
-runDBCallAsync(`http://localhost:3000/api/login?%email=${email}&pass=${pass}`)
+runDBCallAsync(`/api/login?%email=${email}&pass=${pass}`)
 }; // end handle submit
 async function runDBCallAsync(url) {
 const res = await fetch(url);

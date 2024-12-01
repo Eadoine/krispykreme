@@ -1,72 +1,216 @@
-'use client';
+'use client'
+
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Container from '@mui/material/Container';
+
+import AppBar from '@mui/material/AppBar';
+
 import Box from '@mui/material/Box';
 
-export default function Home() {
-const handleSubmit = (event) => {
-console.log("handling submit");
-event.preventDefault();
-const data = new FormData(event.currentTarget);
-let email = data.get('email')
-let pass = data.get('pass')
-console.log("Sent email:" + email)
-console.log("Sent pass:" + pass)
-runDBCallAsync(`http://localhost:3000/api/login?email=${email}&pass=${pass}`)
-}; // end handle submit
-async function runDBCallAsync(url) {
-const res = await fetch(url);
-const data = await res.json();
-if(data.data== "valid"){
-console.log("login is valid!")
-} else {
-console.log("not valid ")
+import Toolbar from '@mui/material/Toolbar';
+
+import Typography from '@mui/material/Typography';
+
+import Button from '@mui/material/Button';
+
+import IconButton from '@mui/material/IconButton';
+
+//import MenuIcon from '@mui/icons-material/Menu';
+
+import {useState,useEffect} from 'react';
+
+
+export default function MyApp() {
+  const [data, setData] = useState(null)
+
+
+ 
+
+  useEffect(() => {
+
+        fetch('/api/getProducts')
+
+          .then((res) => res.json())
+
+          .then((data) => {
+
+            setData(data)
+
+          })
+
+  }, [])
+
+
+  const [showLogin, setShowLogin] = useState(false);
+
+  const [showDash, setShowDash] = useState(false);
+
+  const [showHomePage, setShowHomePage] = useState(true);
+
+
+  function runShowLogin(){
+
+ 
+
+      setShowHomePage(false)
+
+      setShowLogin(true);
+
+      setShowDash(false)
+
+  }
+
+
+  function runShowDash(){
+
+    setShowHomePage(false);
+
+    setShowLogin(false);
+
+    setShowDash(true)
+
+   
+
 }
+
+
+function runShowHome(){
+
+  setShowHomePage(true);
+
+  setShowLogin(false);
+
+  setShowDash(false)
+
+ 
+
 }
-return (
-<Container maxWidth="sm">
-<Box sx={{ height: '100vh' }} >
-<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-<TextField
-margin="normal"
-required
-fullWidth
-id="email"
-label="Email Address"
-name="email"
-autoComplete="email"
-autoFocus
-/>
-<TextField
-margin="normal"
-required
-fullWidth
-name="pass"
-label="Pass"
-type="pass"
-id="pass"
-autoComplete="current-password"
-/>
-<FormControlLabel
-control={<Checkbox value="remember" color="primary" />}
-label="Remember me"
-/>
-<Button
-type="submit"
-fullWidth
-variant="contained"
-sx={{ mt: 3, mb: 2 }}
->
-Sign In
-</Button>
-</Box>
-</Box>
-</Container>
-); // end return
+
+
+  return (
+
+   
+
+    <Box sx={{ flexGrow: 1 }}>
+
+      <AppBar position="static">
+
+        <Toolbar>
+
+          <IconButton
+
+            size="large"
+
+            edge="start"
+
+            color="inherit"
+
+            aria-label="menu"
+
+            sx={{ mr: 2 }}
+
+          >
+
+            
+
+          </IconButton>
+
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
+            Krispy Kreme
+
+          </Typography>
+
+          <Button color="inherit" onClick={runShowHome}>Home</Button>
+
+          <Button color="inherit" onClick={runShowLogin}>Login</Button>
+
+          <Button color="inherit" onClick={runShowDash}>Dashboard</Button>
+
+        </Toolbar>
+
+      </AppBar>
+
+
+
+      {showHomePage &&
+
+      <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+
+   
+
+        
+
+      </Box>
+
+      }
+
+
+
+
+      {showLogin &&
+
+          <Box component="section" sx={{ p: 2, border: '1px dashed grey'}}>
+
+    
+
+     
+      
+          
+
+          </Box>
+
+      }
+
+
+
+
+    {showDash &&
+
+          <Box component="section" sx={{ p: 2, border: '1px dashed grey'}}>
+              {
+
+data.map((item, i) => (
+
+  <div style={{padding: '20px'}} key={i} >
+
+    Unique ID: {item._id}
+
+    <br></br>
+
+    {item.pname}
+
+    -
+
+    {item.price}
+
+    <br></br>
+
+    <Button variant="outlined"> Add to cart </Button>
+
+  </div>
+
+))
+
 }
+     
+
+           
+
+          </Box>
+
+      }
+
+
+
+    </Box>
+
+
+   
+
+
+   
+
+  );
+
+}
+
